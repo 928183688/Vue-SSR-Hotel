@@ -109,7 +109,14 @@ export default {
     },
     // 选择出发时间时候触发
     handleFlightTimes(value) {
+      this.flightTimes = value.from + ':00-' + value.to + ':00'
+      // 拿from <= 值   to >=值
+      const arr = this.data.flights.filter((v) => {
+        return value.from <= v.dep_time.split(':')[0] && value.to >= v.dep_time.split(':')[0]
+      }
 
+      )
+      this.$emit('setDataList', arr)
     },
 
     // 选择航空公司时候触发
@@ -125,7 +132,6 @@ export default {
       const arr = this.data.flights.filter(v =>
         v.plane_size === value
       )
-
       this.$emit('setDataList', arr)
     },
 

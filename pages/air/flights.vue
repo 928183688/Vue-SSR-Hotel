@@ -28,7 +28,7 @@
           <!-- total：总条数 -->
           <el-pagination
             :current-page="pageIndex"
-            :page-sizes="[5, 10, 15, 20]"
+            :page-sizes="[10, 20, 30, 40]"
             :page-size="pageSize"
             layout="total, sizes, prev, pager, next, jumper"
             :total="flightsData.total"
@@ -77,7 +77,7 @@ export default {
       },
       // 机票列表数据
       dataList: [],
-      pageSize: 5,
+      pageSize: 10,
       pageIndex: 1
 
     }
@@ -94,7 +94,7 @@ export default {
       this.flightsData = res.data
       // 机票列表数据
       this.dataList = this.flightsData.flights
-      // 拷贝多一份总数据
+      // 无法改变原来的值 需要拷贝多一份总数据
       this.cacheFlightsData = { ...res.data }
       // 分页
       this.setDataList()
@@ -103,13 +103,14 @@ export default {
   methods: {
     // 设置DataList数据
     setDataList(arr) {
+      // 点击过滤后 要改变页数 改变数组 改变数组的长度
       if (arr) {
         this.pageIndex = 1
         this.flightsData.flights = arr
         this.flightsData.total = arr.length
       }
+      // 分页器的算法 ((1 - 1) * 5, 5)    (0,5) (1,5)(2,5)
       this.dataList = this.flightsData.flights.slice(
-        // 1 - 1 * 5  0  2-1 * 5  5
         (this.pageIndex - 1) * this.pageSize,
         this.pageIndex * this.pageSize
       )
@@ -124,7 +125,6 @@ export default {
     handleSizeChange(value) {
       // 这是选择页面可以分配多少条数据的功能 所以是 this.pageSize = value 因为pageSize是每页多少条数据
       this.pageSize = value
-      this.pageIndex = 1
       this.setDataList()
     }
   }

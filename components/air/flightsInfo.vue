@@ -77,21 +77,21 @@ export default {
   // 计算属性
   computed: {
     // 计算时差
-    // eslint-disable-next-line vue/return-in-computed-property
     rankTime() {
       // 分割为 ['22','30'], ['00','30']
       const dep = this.data.dep_time.split(':')
       const arr = this.data.arr_time.split(':')
       // 转换为分钟
+      // (22 * 60 + 30)  (00 * 60 + 30) 然后相减
       const depVal = dep[0] * 60 + +dep[1]
       const arrVal = arr[0] * 60 + +arr[1]
       // 相减
       let dis = arrVal - depVal
-      // 如果是第二天凌晨 就加24小时
+      // 如果是第二天凌晨 就加24小时  第二个数 加 24  在乘于60  在减去 第一个数
       if (dis < 0) {
         dis = arrVal + 24 * 60 - depVal
       }
-
+      // 之后要取整 总数/60  总数%60
       return `${Math.floor(dis / 60)}时${dis % 60}分`
     }
   },
