@@ -8,10 +8,9 @@
         class="speical_img"
       >
         <nuxt-link
-          :to="`/air/flights?departCity=${item.departCity}
-        &departCode=${item.departCode}
-        &destCity=${item.destCity}&destCode=${item.destCode}
-        &departDate=${item.departDate}`"
+          :to="`/air/flights?
+      departCity=${item.departCity}&
+      departCode=${item.departCode}&destCity=${item.destCity}&destCode=${item.destCode}&departDate=${item.departDate}`"
         >
           <img :src="item.cover" alt="">
           <el-row class="layer-bar" type="flex" justify="space-between">

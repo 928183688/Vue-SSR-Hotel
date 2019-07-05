@@ -27,6 +27,9 @@
           ￥<span class="sell-price">{{ data.base_price / 2 }}</span>起
         </el-col>
       </el-row>
+      <div v-if="data.length === ''">
+        暂无航班信息
+      </div>
     </div>
     <div v-for="(item,index) in data.seat_infos" :key="index" class="flight-recommend">
       <!-- 隐藏的座位信息列表 -->
@@ -46,6 +49,7 @@
               <el-button
                 type="warning"
                 size="mini"
+                @click="handleChangeOrder(data.id,item.seat_xid)"
               >
                 选定
               </el-button>
@@ -98,6 +102,17 @@ export default {
   methods: {
     showFlightsList() {
       this.show = !this.show
+    },
+    // 跳转订单页面
+    handleChangeOrder(id, seatId) {
+      this.$router.push({
+        path: '/air/order',
+        query: {
+          id,
+          seat_xid: seatId
+
+        }
+      })
     }
   }
 }

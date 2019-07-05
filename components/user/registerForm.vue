@@ -98,6 +98,10 @@ export default {
           this.time = 60
         }
       }, 1000)
+      this.$store.dispatch('user/catchamake', this.ruleForm.username).then((res) => {
+        // eslint-disable-next-line no-console
+        console.log(res)
+      })
       this.$axios({
         url: '/captchas',
         method: 'post',

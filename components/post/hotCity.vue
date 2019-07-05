@@ -5,18 +5,10 @@
         in hotCity"
       :key="index"
       class="hot_title"
+      @click="focusChange"
     >
       <span>{{ item.type }}</span>
-      <div class="hot_list" />
-
-      <!-- 推荐城市右边栏 -->
-      <div class="hot_city_aside">
-        <nuxt-link v-for="(first,firstId) in item.children" :key="firstId" to="#">
-          <span>1</span>
-          <span>{{ first.city }}</span>
-          <span>{{ first.desc }}</span>
-        </nuxt-link>
-      </div>
+      <span class="hot_list" />
     </div>
   </div>
 </template>
@@ -26,7 +18,8 @@ export default {
   data() {
     return {
       hotCity: [],
-      currentIndex: 0
+      currentIndex: 0,
+      show: false
     }
   },
   mounted() {
@@ -40,6 +33,9 @@ export default {
     })
   },
   methods: {
+    focusChange() {
+      this.show = !this.show
+    }
   }
 }
 </script>
@@ -80,21 +76,6 @@ export default {
         color: orange
     }
 
-  }
-
-  .hot_city_aside{
-      position: absolute;
-      top: 81px;
-      left: 282px;
-      width: 300px;
-      height: 300px;
-      background: pink;
-      padding: 15px;
-      background: #fff;
-       a{
-           text-align: center;
-           width: 300px;
-       }
   }
 
 }

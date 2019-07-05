@@ -47,5 +47,4 @@ export const actions = {
       Promise.resolve()
     })
   }
-
 }

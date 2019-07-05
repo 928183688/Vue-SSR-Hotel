@@ -1,11 +1,16 @@
 <template>
-  <div>
-    <h1>酒店</h1>
+  <div class="hotel">
+    <!-- 顶部搜索栏 -->
+    <HotelHead />
   </div>
 </template>
 
 <script>
+import HotelHead from '@/components/hotel/hotelHead.vue'
 export default {
+  components: {
+    HotelHead
+  },
   data() {
     return {
 
@@ -15,5 +20,8 @@ export default {
 </script>
 
 <style lang='less' scoped>
-
+    .hotel{
+      width: 1000px;
+      margin: 0 auto;
+    }
 </style>

@@ -82,23 +82,15 @@ export default {
 
     }
   },
+  // 监听url得变化
+  watch: {
+    $route() {
+      this.getdata()
+    }
+  },
   // 先调接口
   mounted() {
-    this.$axios({
-      url: 'airs',
-      params: this.$route.query
-    }).then((res) => {
-      // eslint-disable-next-line no-console
-      console.log(res)
-      // 总数据
-      this.flightsData = res.data
-      // 机票列表数据
-      this.dataList = this.flightsData.flights
-      // 无法改变原来的值 需要拷贝多一份总数据
-      this.cacheFlightsData = { ...res.data }
-      // 分页
-      this.setDataList()
-    })
+    this.getdata()
   },
   methods: {
     // 设置DataList数据
@@ -126,6 +118,23 @@ export default {
       // 这是选择页面可以分配多少条数据的功能 所以是 this.pageSize = value 因为pageSize是每页多少条数据
       this.pageSize = value
       this.setDataList()
+    },
+    getdata() {
+      this.$axios({
+        url: 'airs',
+        params: this.$route.query
+      }).then((res) => {
+      // eslint-disable-next-line no-console
+        console.log(res)
+        // 总数据
+        this.flightsData = res.data
+        // 机票列表数据
+        this.dataList = this.flightsData.flights
+        // 无法改变原来的值 需要拷贝多一份总数据
+        this.cacheFlightsData = { ...res.data }
+        // 分页
+        this.setDataList()
+      })
     }
   }
 }
