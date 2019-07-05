@@ -31,6 +31,7 @@
         range-separator="-"
         start-placeholder="入住日期"
         end-placeholder="离店日期"
+        value-format="yyyy-MM-dd"
       />
 
       <!-- 儿童人数框 -->
@@ -74,12 +75,11 @@
           type="primary"
           size="mini"
           style="margin-top:20px;float:right"
-          @click="handleSubmitAC"
         >
           确定
         </el-button>
       </el-popover>
-      <el-button type="primary">
+      <el-button type="primary" @click="handleSubmitAC">
         查看价格
       </el-button>
     </el-form>
@@ -104,20 +104,16 @@
 export default {
   data() {
     return {
-      // 城市
-      city: '广州',
-      start: '',
-      end: '',
-      map: null,
       // 区域信息
       areaInfo: [],
       // 表单信息
       form: {
         // 搜索框
         search: '南京',
-        date: '',
-        hunman: ''
+        date: [],
+        hunman: null
       },
+      hotelData: [],
       // 成人
       adultOptions: [
         {
@@ -168,8 +164,7 @@ export default {
       childValue: '儿童'
     }
   },
-  mounted() {
-  },
+  mounted() {},
   methods: {
     // 搜索城市
     querySearchAsync(value, cb) {
@@ -207,6 +202,7 @@ export default {
     handleSubmitAC() {
       const AdultandChild = this.adultValue + this.childValue
       this.form.hunman = AdultandChild
+      this.$emit('sendHotelData', this.form)
     }
   }
 }

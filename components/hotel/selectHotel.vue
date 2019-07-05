@@ -7,7 +7,7 @@
           <span>{{ slideNum }}</span>
         </el-row>
         <el-row :span="24">
-          <el-slider v-model="slideValue" :max="max" @change="slidevalue" />
+          <el-slider v-model="searchData.slideValue" :max="max" @change="slidevalue" />
         </el-row>
       </el-col>
       <el-col :span="4" class="space">
@@ -16,12 +16,14 @@
         </el-row>
         <el-row :span="24">
           <el-select
-            v-model="hotelLevels"
+            v-model="searchData.hotelLevels"
             :multiple="true"
             collapse-tags
             placeholder="不限"
             style="border:none;"
             size="mini"
+            :clearable="true"
+            @change="handelLevel"
           >
             <el-option
               v-for="item in hotelData.levels"
@@ -38,12 +40,14 @@
         </el-row>
         <el-row :span="24">
           <el-select
-            v-model="hotelTypes"
+            v-model="searchData.hotelTypes"
             :multiple="true"
             collapse-tags
             placeholder="不限"
             style="border: 0; background: transparent; outline: none;"
             size="mini"
+            :clearable="true"
+            @change="hotelType"
           >
             <el-option
               v-for="item in hotelData.types"
@@ -60,12 +64,14 @@
         </el-row>
         <el-row :span="24">
           <el-select
-            v-model="hotelAssets"
+            v-model="searchData.hotelAssets"
             :multiple="true"
             collapse-tags
             placeholder="不限"
             style="border:none;"
             size="mini"
+            :clearable="true"
+            @change="hotelAsset"
           >
             <el-option
               v-for="item in hotelData.assets"
@@ -82,12 +88,14 @@
         </el-row>
         <el-row :span="24">
           <el-select
-            v-model="hotelBrands"
+            v-model="searchData.hotelBrands"
             :multiple="true"
             collapse-tags
             placeholder="不限"
             style="border:none;"
             size="mini"
+            :clearable="true"
+            @change="hotelBrand"
           >
             <el-option
               v-for="item in hotelData.brands"
@@ -105,12 +113,14 @@
 export default {
   data() {
     return {
-      hotelLevels: [],
-      hotelAssets: [],
-      hotelBrands: [],
-      hotelTypes: [],
+      searchData: {
+        hotelLevels: [],
+        hotelAssets: [],
+        hotelBrands: [],
+        hotelTypes: [],
+        slideValue: 0
+      },
       hotelData: [],
-      slideValue: 0,
       max: 4000,
       slideNum: 0,
       checkList: []
@@ -121,14 +131,38 @@ export default {
   },
   methods: {
     slidevalue(value) {
-      this.slideNum = value
+      this.searchData.slideValue = value
+      this.$emit('setRenderData', this.searchData)
     },
-    getHotelStart() {},
+    // 住宿等级
+    handelLevel(value) {
+      // eslint-disable-next-line no-console
+      this.searchData.hotelLevels = value
+      this.$emit('setRenderData', this.searchData)
+    },
+    // 住宿的类型
+    hotelType(value) {
+      this.searchData.hotelTypes = value
+      this.$emit('setRenderData', this.searchData)
+    },
+    // 酒店类型
+    hotelAsset(value) {
+      this.searchData.hotelAssets = value
+      this.$emit('setRenderData', this.searchData)
+    },
+    // 酒店品牌
+    hotelBrand(value) {
+      this.searchData.hotelBrands = value
+      this.$emit('setRenderData', this.searchData)
+    },
+    // 获取酒店数据
+    search() {},
     getHotel() {
       this.$axios({
         url: '/hotels/options'
       }).then((res) => {
-        // console.log(res)
+        // eslint-disable-next-line no-console
+        console.log(res)
         this.hotelData = res.data.data
       })
     }
