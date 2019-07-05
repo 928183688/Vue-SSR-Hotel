@@ -96,23 +96,6 @@
         <div>攻略</div>
         <div>均价</div>
       </div>
-
-      <!-- 右边是地图 -->
-      <select id="" v-model="city" name="">
-        <option value="广州">
-          广州
-        </option>
-        <option value="深圳">
-          深圳
-        </option>
-      </select>
-      <input v-model="start" type="text" placeholder="请输入出发地点">
-      <input v-model="end" type="text" placeholder="到达点">
-      <button @click="handleSearch">
-        搜索
-      </button>
-      <div id="container" />
-      <div id="panel" />
     </div>
   </div>
 </template>
@@ -186,37 +169,6 @@ export default {
     }
   },
   mounted() {
-    window.onLoad = function () {
-      // eslint-disable-next-line no-undef
-      const map = new AMap.Map('container', {
-        zoom: 11, // 级别
-        // center: [116.397428, 39.90923], // 中心点坐标
-        viewMode: '3D' // 使用3D视图
-      })
-
-      // 插件
-      // eslint-disable-next-line no-undef
-      const toolbar = new AMap.ToolBar()
-      map.addControl(toolbar)
-
-      // 创建一个 Marker 实例：
-      // eslint-disable-next-line no-undef
-      const marker = new AMap.Marker({
-        // eslint-disable-next-line no-undef
-        position: new AMap.LngLat(116.39, 39.9), // 经纬度对象，也可以是经纬度构成的一维数组[116.39, 39.9]
-        content:
-          '<div class="iconfont icon-dingwei" style="font-size:30px;color:blue"></div>', // 自定义点标记覆盖物内容
-        title: '北京'
-      })
-      // 将创建的点标记添加到已有的地图实例：
-      map.add(marker)
-    }
-    const key = 'b1112d4143278dc98b66dae026ef0eee'
-    const url = `https://webapi.amap.com/maps?v=1.4.15&key=${key}&callback=onLoad&plugin=AMap.ToolBar,AMap.Driving`
-    const jsapi = document.createElement('script')
-    jsapi.charset = 'utf-8'
-    jsapi.src = url
-    document.head.appendChild(jsapi)
   },
   methods: {
     // 搜索城市
@@ -255,31 +207,6 @@ export default {
     handleSubmitAC() {
       const AdultandChild = this.adultValue + this.childValue
       this.form.hunman = AdultandChild
-    },
-    // 查询路线
-    handleSearch() {
-      // eslint-disable-next-line no-undef
-      this.map = new AMap.Map('container', {
-        zoom: 11, // 级别
-        // center: [116.397428, 39.90923], // 中心点坐标
-        viewMode: '3D' // 使用3D视图
-      })
-      // eslint-disable-next-line no-undef
-      const driving = new AMap.Driving({
-        // 驾车路线规划策略，AMap.DrivingPolicy.LEAST_TIME是最快捷模式
-        // eslint-disable-next-line no-undef
-        policy: AMap.DrivingPolicy.LEAST_TIME,
-        panel: 'panel',
-        map: this.map
-      })
-      const points = [
-        { keyword: this.start, city: this.city },
-        { keyword: this.end, city: this.city }
-      ]
-
-      driving.search(points, function (status, result) {
-        // 未出错时，result即是对应的路线规划方案
-      })
     }
   }
 }
@@ -291,28 +218,5 @@ export default {
 }
 .hotel_left {
   width: 590px;
-}
-#container {
-  width: 500px;
-  height: 500px;
-}
-#panel {
-  position: fixed;
-  background-color: white;
-  max-height: 90%;
-  overflow-y: auto;
-  top: 10px;
-  right: 10px;
-  width: 280px;
-}
-#panel .amap-call {
-  background-color: #009cf9;
-  border-top-left-radius: 4px;
-  border-top-right-radius: 4px;
-}
-#panel .amap-lib-driving {
-  border-bottom-left-radius: 4px;
-  border-bottom-right-radius: 4px;
-  overflow: hidden;
 }
 </style>
