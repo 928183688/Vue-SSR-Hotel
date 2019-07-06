@@ -7,7 +7,7 @@
           <span>{{ slideNum }}</span>
         </el-row>
         <el-row :span="24">
-          <el-slider v-model="searchData.slideValue" :max="max" @change="slidevalue" />
+          <el-slider v-model="searchData.slideValue" :max="max" @change="slideShow" />
         </el-row>
       </el-col>
       <el-col :span="4" class="space">
@@ -23,7 +23,6 @@
             style="border:none;"
             size="mini"
             :clearable="true"
-            @change="handelLevel"
           >
             <el-option
               v-for="item in hotelData.levels"
@@ -47,13 +46,12 @@
             style="border: 0; background: transparent; outline: none;"
             size="mini"
             :clearable="true"
-            @change="hotelType"
           >
             <el-option
               v-for="item in hotelData.types"
               :key="item.id"
               :label="item.name"
-              :value="item.id"
+              :value="item.name"
             />
           </el-select>
         </el-row>
@@ -71,13 +69,12 @@
             style="border:none;"
             size="mini"
             :clearable="true"
-            @change="hotelAsset"
           >
             <el-option
               v-for="item in hotelData.assets"
               :key="item.id"
               :label="item.name"
-              :value="item.id"
+              :value="item.name"
             />
           </el-select>
         </el-row>
@@ -95,13 +92,12 @@
             style="border:none;"
             size="mini"
             :clearable="true"
-            @change="hotelBrand"
           >
             <el-option
               v-for="item in hotelData.brands"
               :key="item.id"
               :label="item.name"
-              :value="item.id"
+              :value="item.name"
             />
           </el-select>
         </el-row>
@@ -111,6 +107,13 @@
 </template>
 <script>
 export default {
+  props: {
+    hotel: {
+      type: Array,
+      // eslint-disable-next-line vue/require-valid-default-prop
+      default: []
+    }
+  },
   data() {
     return {
       searchData: {
@@ -122,41 +125,75 @@ export default {
       },
       hotelData: [],
       max: 4000,
-      slideNum: 0,
-      checkList: []
+      slideNum: 0
     }
   },
+  watch: {
+    searchData: {
+      // eslint-disable-next-line comma-spacing
+      handler(val,oldVal) {
+        this.filterData(val)
+      },
+      deep: true // 深度监听所有下拉框的属性，一旦有任何一个属性改变，就会立刻触发
+      // 并且将改变的整个对象传入过滤事件
+      // immediate: false
+    }
+  },
+  created: function () {
+    // 初始化修改值
+    this.$watch('searchData', this.filterData)
+  },
   mounted() {
-    this.getHotel()
+    this.getHotel() // 一开始就先加载筛选添加的数据
+    // eslint-disable-next-line no-console
+    console.log(this.hotel)
   },
   methods: {
-    slidevalue(value) {
-      this.searchData.slideValue = value
-      this.$emit('setRenderData', this.searchData)
+    slideShow(value) {
+      this.slideNum = value // 滑竿右侧的数值。用于显示同步
     },
-    // 住宿等级
-    handelLevel(value) {
+    // 条件过滤的方法
+    filterData(val) {
       // eslint-disable-next-line no-console
-      this.searchData.hotelLevels = value
-      this.$emit('setRenderData', this.searchData)
+      // console.log(this.hotel)
+      // eslint-disable-next-line no-console
+      // console.log(val)
+      // eslint-disable-next-line no-unused-vars
+      let arr = this.hotel
+      if (val.slideValue !== 0) {
+        arr = arr.filter((v) => {
+          return v.price <= val.slideValue // 过滤当前金额小于筛选则通过
+        })
+      }
+      if (val.hotelLevels.length !== 0) {
+        arr = arr.filter((v) => {
+          return val.hotelLevels.indexOf(v.stars) !== -1 || v.stars <= Math.max(...val.hotelLevels)
+          // 如果当前条件的数组内能查到过滤数据的索引则表示当前酒店通过
+          // 因为星级有3.5星的，而过滤选项都是整数，所以，如果当前被过滤酒店的星级小于过滤条件数组内最大的星级，也符合
+        })
+      }
+      if (val.hotelTypes.length !== 0) {
+        arr = arr.filter((v) => {
+          return val.hotelTypes.indexOf(v.hoteltype.name) !== -1
+        })
+      }
+      if (val.hotelAssets.length !== 0) {
+        arr = arr.filter((v) => {
+          // v.hotelassets.type一家酒店有多个设施，需要将两个数组进行对比
+          for (let i = 0; i < v.hotelassets.length; i++) {
+            return val.hotelAssets.indexOf(v.hotelassets[i].name) !== -1
+          }
+          // 这里有问题
+        })
+      }
+      if (val.hotelBrands.length !== 0) {
+        arr = arr.filter((v) => {
+          return val.hotelBrands.indexOf(v.hotelbrand) !== -1
+          // 过滤符合品牌的酒店，
+        })
+      }
+      this.$emit('setRenderData', arr)
     },
-    // 住宿的类型
-    hotelType(value) {
-      this.searchData.hotelTypes = value
-      this.$emit('setRenderData', this.searchData)
-    },
-    // 酒店类型
-    hotelAsset(value) {
-      this.searchData.hotelAssets = value
-      this.$emit('setRenderData', this.searchData)
-    },
-    // 酒店品牌
-    hotelBrand(value) {
-      this.searchData.hotelBrands = value
-      this.$emit('setRenderData', this.searchData)
-    },
-    // 获取酒店数据
-    search() {},
     getHotel() {
       this.$axios({
         url: '/hotels/options'

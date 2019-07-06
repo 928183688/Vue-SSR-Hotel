@@ -1,5 +1,5 @@
 <template>
-  <div class="hotel_head">
+  <el-col class="hotel_head">
     <!-- 面包屑 -->
     <div class="hotel_mbx">
       <el-breadcrumb separator-class="el-icon-arrow-right">
@@ -18,7 +18,7 @@
     >
       <!-- 搜索框 -->
       <el-autocomplete
-        v-model="form.search"
+        v-model="form.city"
         :fetch-suggestions="querySearchAsync"
         placeholder="目的地"
         @select="handleSelect"
@@ -71,11 +71,7 @@
             :value="child.value"
           />
         </el-select>
-        <el-button
-          type="primary"
-          size="mini"
-          style="margin-top:20px;float:right"
-        >
+        <el-button type="primary" size="mini" style="margin-top:20px;float:right">
           确定
         </el-button>
       </el-popover>
@@ -84,24 +80,72 @@
       </el-button>
     </el-form>
     <!-- 中间区域 -->
-    <div type="flex" justify="space-between">
-      <!-- 左边是区域块 -->
-      <div class="hotel_left">
-        <div>
-          区域:
-          <nuxt-link v-for="(item,index) in areaInfo" :key="index" to="#">
-            {{ item.name }}
-          </nuxt-link>
+    <el-row type="flex">
+      <el-col :span="12">
+        <!-- 左边是区域块 -->
+        <div class="hotel_left">
+          <el-row type="flex">
+            <div style="width:30px">
+              区域:
+            </div>
+            <span class="area">
+              <span v-for="(item,index) in areaInfo" :key="index" class="area-i">
+                <nuxt-link to="#">{{ item.name }}</nuxt-link>
+              </span>
+            </span>
+          </el-row>
         </div>
-        <div>攻略</div>
-        <div>均价</div>
-      </div>
-    </div>
-  </div>
+        <div class="hotel_left">
+          <el-row type="flex">
+            <div style="width:30px">
+              攻略:
+            </div>
+            <span class="area">
+              <span class="area-i">
+                <nuxt-link
+                  to="#"
+                >北京，你想要的都能在这找到。博古通今，兼容并蓄，天下一城，如是帝都。 景点以故宫为中心向四处辐射；地铁便宜通畅，而且覆盖绝大多数景点。 由于早上有天安门升旗仪式，所以大多数人选择在天安门附近住宿。</nuxt-link>
+              </span>
+            </span>
+          </el-row>
+        </div>
+        <div class="hotel_left">
+          <el-row type="flex">
+            <div style="width:30px">
+              区域:
+            </div>
+            <span class="area">
+              <span class="area-i">
+                <span class="iconfont el-icon-star-off" />
+                <span class="iconfont el-icon-star-off" />
+                <span class="iconfont el-icon-star-off" />
+                <i style="padding-left:3px">$332</i>
+                <span class="iconfont el-icon-star-off" />
+                <span class="iconfont el-icon-star-off" />
+                <span class="iconfont el-icon-star-off" />
+                <i style="padding-left:3px">$782</i>
+                <span class="iconfont el-icon-star-off" />
+                <span class="iconfont el-icon-star-off" />
+                <span class="iconfont el-icon-star-off" />
+                <i>$1278</i>
+              </span>
+            </span>
+          </el-row>
+        </div>
+      </el-col>
+      <el-col :span="12">
+        <Map />
+      </el-col>
+    </el-row>
+  </el-col>
 </template>
 
 <script>
+import Map from '@/components/hotel/map.vue'
 export default {
+  components: {
+    Map
+  },
   data() {
     return {
       // 区域信息
@@ -109,11 +153,10 @@ export default {
       // 表单信息
       form: {
         // 搜索框
-        search: '南京',
+        city: '南京',
         date: [],
         hunman: null
       },
-      hotelData: [],
       // 成人
       adultOptions: [
         {
@@ -164,7 +207,19 @@ export default {
       childValue: '儿童'
     }
   },
-  mounted() {},
+  mounted() {
+    this.$axios({
+      url: '/cities',
+      params: {
+        name: this.form.city
+      }
+    }).then((res) => {
+      // eslint-disable-next-line no-console
+      this.areaInfo = res.data.data[0].scenics
+      // eslint-disable-next-line no-console
+      console.log(res.data.data[0])
+    })
+  },
   methods: {
     // 搜索城市
     querySearchAsync(value, cb) {
@@ -209,10 +264,29 @@ export default {
 </script>
 
 <style lang='less' scoped>
+.hotel_head{
+  margin-bottom: 30px;
+}
 .hotel_mbx {
   margin: 20px 0px;
 }
 .hotel_left {
-  width: 590px;
+  // width: 590px;
+  font-size: 13px;
+  word-spacing: 5px;
+  justify-content: space-between;
+  margin-top: 20px;
+}
+.area {
+  margin-left: 50px;
+  width: 400px;
+  white-space: 10px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  height: 70px;
+  .area-i {
+    display: inline-block;
+    padding-left: 1em;
+  }
 }
 </style>
