@@ -5,7 +5,7 @@
       :key="index"
       v-loading="loading"
       class="main"
-      :to="`/hotel/${item.id}`.html"
+      :to="`/hotel/${item.id}.html`"
       element-loading-text="等我装逼完毕"
       element-loading-spinner="el-icon-loading"
       element-loading-background="rgba(0, 0, 0, 0.8)"
