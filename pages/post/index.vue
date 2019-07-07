@@ -33,7 +33,7 @@
           <h4 class="aside-title">
             推荐城市
           </h4>
-          <nuxt-link to="#" class="aside-recommend-item">
+          <nuxt-link to="post" class="aside-recommend-item">
             <img src="@/assets/images/pic_sea.jpeg">
           </nuxt-link>
         </div>
@@ -69,9 +69,6 @@
 
         <div class="post-list">
           <postCard v-for="(item, index) in posts" :key="index" :data="item" />
-          <!-- <div v-if="posts.length===0" class="catchInfo">
-            暂无攻略信息 请搜索！！
-          </div> -->
         </div>
 
         <!-- 分页 -->

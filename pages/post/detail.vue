@@ -63,7 +63,13 @@
 
         <!-- 评论输入框 -->
         <div ref="cmtInput" class="cmt-input">
-          <el-input v-model="cmtForm.content" type="textarea" resize="none" placeholder="说点什么吧..." @keydown.enter.native="handleCmtSubmit" />
+          <el-input
+            v-model="cmtForm.content"
+            type="textarea"
+            resize="none"
+            placeholder="说点什么吧..."
+            @keydown.enter.native="handleCmtSubmit"
+          />
         </div>
         <el-row type="flex" justify="space-between" class="cmt-input-ctrls">
           <!-- 上传图片 -->
@@ -177,7 +183,7 @@
 
 <script>
 import moment from 'moment'
-import CommentFloor from '@/components/post/commentFloor'
+import CommentFloor from '@/components/post/commentFloor.vue'
 
 export default {
   components: {
@@ -215,6 +221,12 @@ export default {
       comments: []
     }
   },
+  watch: {
+    $route() {
+      this.getPostData()
+      this.getSpeakData()
+    }
+  },
   mounted() {
     // 请求文章数据
     this.getPostData()
@@ -231,8 +243,6 @@ export default {
       }).then((res) => {
         const { data } = res
         this.detail = data
-        // eslint-disable-next-line no-console
-        // console.log(this.detail)
       })
     },
     // 请求评论数据
@@ -245,8 +255,6 @@ export default {
           _start: this.start
         }
       }).then((res) => {
-        // eslint-disable-next-line no-console
-        // console.log(res)
         const { data, total } = res.data
         this.comments = data
         this.total = total
@@ -358,8 +366,6 @@ export default {
           id: this.detail.id
         }
       }).then((res) => {
-        // eslint-disable-next-line no-console
-        console.log(res)
         this.recommends = res.data.data
       })
     }

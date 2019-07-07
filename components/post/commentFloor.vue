@@ -1,6 +1,6 @@
 <template>
   <div class="cmt-floor">
-    <post-comment-floor v-if="comment.parent" :comment="comment.parent" @preview="handlePreview" @reply="handleReply" />
+    <PostCommentFloor v-if="comment.parent" :comment="comment.parent" @preview="handlePreview" @reply="handleReply" />
     <div class="cmt-content">
       <div class="cmt-info">
         {{ comment.account.nickname }}
