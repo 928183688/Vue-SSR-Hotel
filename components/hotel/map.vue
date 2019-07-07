@@ -1,6 +1,7 @@
+/* eslint-disable no-console */
 <template>
   <div class="main">
-    <div id="container" />
+    <div id="container" v-loading="loading" />
     <!-- <div>
       <select id v-model="city" name>
         <option value="广州">
@@ -15,24 +16,49 @@
       目的地:
       <input v-model="end" type="text">
       开始规划路线:
-      <input type="button" value="搜索" @click="handleclick">
-    </div> -->
+
+    </div>-->
+    <!-- <input type="button" value="搜索" @click="handleclick"> -->
     <div id="panel" />
   </div>
 </template>
 <script>
 export default {
+  props: {
+    mapdata: {
+      type: Array,
+      // eslint-disable-next-line vue/require-valid-default-prop
+      default: []
+    }
+  },
   data() {
     return {
+      loading: false,
       map: null,
       start: '',
       end: '',
-      city: ''
+      city: '',
+      perspective: {},
+      longitude: 118.871, // 唯独
+      latitude: 31.328,
+      markers: []
+    }
+  },
+  watch: {
+    mapdata: {
+      handler(val, oldVal) {
+        // eslint-disable-next-line no-console
+        // console.log(val)
+        this.markers = []
+        this.getselectdata(val)
+      },
+      deep: true
     }
   },
 
   mounted() {
-    window.onLoad = function () {
+    // eslint-disable-next-line no-console
+    window.onLoad = () => {
       // 将当前的地图绑定到Vue上，
       // eslint-disable-next-line no-undef
       this.map = new AMap.Map('container', {
@@ -43,21 +69,6 @@ export default {
       // eslint-disable-next-line no-undef
       const toolbar = new AMap.ToolBar() // 声明拖动条插件
       this.map.addControl(toolbar) // 加入放大镜插件
-
-      // 创建maker实例，点标记
-      // eslint-disable-next-line no-undef
-      const marker = new AMap.Marker({
-        content:
-            "<span class='iconfont icon-dingwei' style='color:deeppink;fontSize:20px'></span>",
-        // eslint-disable-next-line no-undef
-        position: new AMap.LngLat(118.872, 31.328), // 基点,经纬度对象，也可以是经纬度构成的一维数组[116.39, 39.9]
-        // 第一个是维度。第二个数经度,
-        // eslint-disable-next-line no-undef
-        offset: new AMap.Pixel(-17, -42), // 相对于基点的偏移位置
-        title: '北京'
-      })
-      // 将创建的点标记添加到已有的地图实例：
-      this.map.add(marker) // 可以创建多个marker
     }
     const key = '8a150eccffa8b038bd2294c4a0a8ddb7'
     const url = `https://webapi.amap.com/maps?v=1.4.15&key=${key}&callback=onLoad&plugin=AMap.ToolBar,AMap.Driving,AMap.MarkerClusterer`
@@ -66,8 +77,45 @@ export default {
     jsapi.charset = 'utf-8'
     jsapi.src = url
     document.head.appendChild(jsapi)
+    // eslint-disable-next-line no-console
   },
   methods: {
+    // 加载提示  标点重新刷新
+
+    getselectdata(val) {
+      // eslint-disable-next-line no-console
+      // console.log(val)
+      // eslint-disable-next-line no-undef
+      this.loading = !this.loading
+      setTimeout(() => {
+        this.loading = !this.loading
+      }, 2000)
+      // eslint-disable-next-line no-undef
+      this.map = new AMap.Map('container', {
+        zoom: 11, // 级别
+        center: [118.871, 31.328], // 地图初始化中心点的位置
+        viewMode: '3D' // 使用3D视图
+      }) // 地图重新创建
+      // eslint-disable-next-line no-var
+      this.markers = []
+      val.forEach((v) => {
+        // 创建maker实例，点标记
+      // eslint-disable-next-line no-undef
+        const marker = new AMap.Marker({
+          content:
+                "<span class='iconfont icon-dingwei' style='color:deeppink;font-size:40px'></span>",
+          // eslint-disable-next-line no-undef
+          position: new AMap.LngLat(v.location.longitude, v.location.latitude), // 基点,经纬度对象，也可以是经纬度构成的一维数组[116.39, 39.9]
+          // 第一个是维度。第二个数经度,
+          // eslint-disable-next-line no-undef
+          offset: new AMap.Pixel(-17, -42), // 相对于基点的偏移位置
+          title: '南京'
+        })
+        this.markers.push(marker)
+      })
+      // 将创建的点标记添加到已有的地图实例：
+      this.map.add(this.markers) // 可以创建多个marker
+    }
     // handleclick() {
     //   // 每次调用会重新生成一个地图对象。覆盖之前的地图
     //   // eslint-disable-next-line no-undef
@@ -100,7 +148,7 @@ export default {
 </script>
 <style lang="less" scoped>
 .main {
-  margin-top:20px;
+  margin-top: 20px;
   width: 1000px;
   margin: 0 auto;
 }

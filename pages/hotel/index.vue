@@ -1,7 +1,7 @@
 <template>
   <div class="hotel">
     <!-- 顶部搜索栏 -->
-    <HotelHead @sendHotelData="sendHotelData" />
+    <HotelHead :hotel="renderData" @sendHotelData="sendHotelData" />
     <SelectHotel :hotel="hotelData" @setRenderData="setRenderData" />
     <HotelRander :hoteldata="renderData" />
     <el-row type="flex" style="position: relative; height:50px">
@@ -69,7 +69,7 @@ export default {
           query: this.$route.query
         }).then((res) => {
           // eslint-disable-next-line no-console
-          console.log(res.data)
+          // console.log(res.data)
           this.renderData = res.data.data // 在没有筛选条件的时候，先给render组件渲染所欲内容
           this.hotelData = res.data.data // 发给select筛选的数据
           this.total = res.data.total

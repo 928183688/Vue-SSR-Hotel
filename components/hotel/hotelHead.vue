@@ -134,7 +134,7 @@
         </div>
       </el-col>
       <el-col :span="12">
-        <Map />
+        <Map :mapdata="hotel" />
       </el-col>
     </el-row>
   </el-col>
@@ -145,6 +145,13 @@ import Map from '@/components/hotel/map.vue'
 export default {
   components: {
     Map
+  },
+  props: {
+    hotel: {
+      type: Array,
+      // eslint-disable-next-line vue/require-valid-default-prop
+      default: []
+    }
   },
   data() {
     return {
@@ -287,6 +294,9 @@ export default {
   .area-i {
     display: inline-block;
     padding-left: 1em;
+    >span{
+      color:orange;
+    }
   }
 }
 </style>
