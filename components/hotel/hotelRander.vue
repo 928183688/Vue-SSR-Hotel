@@ -78,7 +78,11 @@ export default {
       this.loading = false
     }, 3000)
   },
-  methods: {}
+  methods: {
+    // jumpRoute(){
+    //   this.$router.push("/hotels")
+    // }
+  }
 }
 </script>
 <style lang="less" scoped>
