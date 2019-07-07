@@ -29,7 +29,7 @@
         <el-input v-model="ruleForm.password" placeholder="密码" type="password" autocomplete="off" />
       </el-form-item>
       <el-form-item prop="checkPass">
-        <el-input v-model="ruleForm.checkPass" type="password" autocomplete="off" />
+        <el-input v-model="ruleForm.checkPass" type="password" placeholder="确认密码" autocomplete="off" />
       </el-form-item>
 
       <el-form-item>
@@ -98,10 +98,6 @@ export default {
           this.time = 60
         }
       }, 1000)
-      this.$store.dispatch('user/catchamake', this.ruleForm.username).then((res) => {
-        // eslint-disable-next-line no-console
-        console.log(res)
-      })
       this.$axios({
         url: '/captchas',
         method: 'post',

@@ -3,7 +3,7 @@
     <div class="footer">
       <el-row class="info-list">
         <el-col :span="6" :offset="1">
-          <h5>闲云旅游旅游网</h5>
+          <h5>云顶旅游旅游网</h5>
           <p>上亿旅行者共同打造的"旅行神器"</p>
           <p><span>60,000</span> 多个全球旅游目的地</p>
           <p><span>600,000</span> 个细分目的地新玩法</p>
@@ -16,7 +16,7 @@
           <p>服务协议 游记协议</p>
           <p>商城平台服务协议</p>
           <p>网络信息侵权通知指引</p>
-          <p>闲云旅游旅游网服务监督员</p>
+          <p>旅游网服务监督员</p>
           <p>网站地图加入闲云旅游</p>
         </el-col>
         <el-col :span="5">
@@ -27,16 +27,10 @@
           <p>旅游指南 订火车票</p>
           <p>旅游资讯 APP下载</p>
         </el-col>
-        <el-col :span="6" class="scan">
-          <p>
-            <img src="http://157.122.54.189:9093/images/1556522965.png" alt="">
-          </p>
-          关注我们
-        </el-col>
       </el-row>
 
       <div class="licence">
-        京ICP备08001421号 京公网安备110108007702 Copyright © 2016-2019 博学谷 All Rights Reserved
+        京ICP备08001421号 京公网安备110108007702 Copyright ©  All Rights Reserved
       </div>
     </div>
   </div>

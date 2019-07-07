@@ -18,6 +18,10 @@
           :key="index"
           :data="item"
         />
+        <!-- 航班信息错误 -->
+        <div v-if="dataList.length===0" class="catchInfo">
+          暂无航班信息
+        </div>
 
         <!-- 分页 -->
         <el-row type="flex" justify="center" style="margin-top:10px;">
@@ -154,4 +158,9 @@ export default {
     .aside{
         width:240px;
     }
+     .catchInfo{
+    margin-top: 20px;
+    margin-left: 340px;
+    font-size: 20px;
+  }
 </style>

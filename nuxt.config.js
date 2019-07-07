@@ -5,14 +5,14 @@ export default {
   ** Headers of the page
   */
   head: {
-    title: '咸鱼旅游',
+    title: '云顶旅游',
     meta: [
       { charset: 'utf-8' },
       { name: 'viewport', content: 'width=device-width, initial-scale=1' },
       { hid: 'description', name: 'description', content: process.env.npm_package_description || '' }
     ],
     link: [
-      { rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' },
+      { rel: 'icon', type: 'image/x-icon', href: '/123.ico' },
       // 新增全局字体样式
       { rel: 'stylesheet', type: 'text/css', href: '//at.alicdn.com/t/font_1168872_ehvuah8v57g.css' },
       { rel: 'stylesheet', type: 'text/css', href: '//at.alicdn.com/t/font_1277393_6jrb96i3g8f.css' }

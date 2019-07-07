@@ -130,13 +130,11 @@ export default {
   },
   watch: {
     searchData: {
-      // eslint-disable-next-line comma-spacing
-      handler(val,oldVal) {
+      handler(val, oldVal) {
         this.filterData(val)
       },
       deep: true // 深度监听所有下拉框的属性，一旦有任何一个属性改变，就会立刻触发
       // 并且将改变的整个对象传入过滤事件
-      // immediate: false
     }
   },
   created: function () {
@@ -145,8 +143,6 @@ export default {
   },
   mounted() {
     this.getHotel() // 一开始就先加载筛选添加的数据
-    // eslint-disable-next-line no-console
-    console.log(this.hotel)
   },
   methods: {
     slideShow(value) {
@@ -154,11 +150,6 @@ export default {
     },
     // 条件过滤的方法
     filterData(val) {
-      // eslint-disable-next-line no-console
-      // console.log(this.hotel)
-      // eslint-disable-next-line no-console
-      // console.log(val)
-      // eslint-disable-next-line no-unused-vars
       let arr = this.hotel
       if (val.slideValue !== 0) {
         arr = arr.filter((v) => {
@@ -198,8 +189,6 @@ export default {
       this.$axios({
         url: '/hotels/options'
       }).then((res) => {
-        // eslint-disable-next-line no-console
-        console.log(res)
         this.hotelData = res.data.data
       })
     }

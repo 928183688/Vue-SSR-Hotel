@@ -34,7 +34,7 @@
             推荐城市
           </h4>
           <nuxt-link to="#" class="aside-recommend-item">
-            <img src="/images/pic_sea.jpeg">
+            <img src="@/assets/images/pic_sea.jpeg">
           </nuxt-link>
         </div>
       </div>
@@ -46,17 +46,17 @@
             <input
               v-model="city"
               type="text"
-              placeholder="请输入想去的地方，比如：'广州'"
-              @keyup.enter="handleSearch"
+              placeholder="请输入想去的地方，比如：'成都'"
+              @keydown.enter="handleSearch"
             >
             <i class="el-icon-search" @click="handleSearch" />
           </el-row>
           <div class="search-recommend">
             推荐：
             <span
-              v-for="(item, index) in [`广州`, `上海`, `北京`]"
+              v-for="(item, index) in [`成都`, `青岛`, `北京`,`广州`]"
               :key="index"
-              @click="handleSearch(item)"
+              @click="handleChangeCity(item)"
             >{{ item }}</span>
           </div>
         </div>
@@ -68,12 +68,16 @@
         </el-row>
 
         <div class="post-list">
-          <!-- <postCard v-for="(item, index) in posts" :key="index" :data="item" /> -->
+          <postCard v-for="(item, index) in posts" :key="index" :data="item" />
+          <!-- <div v-if="posts.length===0" class="catchInfo">
+            暂无攻略信息 请搜索！！
+          </div> -->
         </div>
 
+        <!-- 分页 -->
         <el-row type="flex" justify="center" style="margin-top:10px;">
           <el-pagination
-            :current-page="Math.floor(start / limit) + 1"
+            :current-page="Math.floor(start/limit) + 1"
             :page-sizes="[3, 5, 10, 15]"
             :page-size="limit"
             layout="total, sizes, prev, pager, next, jumper"
@@ -88,12 +92,12 @@
 </template>
 
 <script>
-// import postCard from '@/components/post/postCard'
+import postCard from '@/components/post/postCard'
 
 export default {
-  // components: {
-  //   postCard
-  // },
+  components: {
+    postCard
+  },
   data() {
     return {
       currentMenu: 999,
@@ -102,34 +106,89 @@ export default {
       posts: [],
       cities: [],
       currentCities: [],
-
-      // filtersF
-      city: this.$route.query.city || '',
+      city: '',
       start: 0,
       limit: 3,
       total: 0
     }
   },
+  watch: {
+    $route(value) {
+      const { city } = value.query
+      this.city = city
+      this.start = 0
+      this.getPost()
+    }
+  },
   mounted() {
-  // 城市列表
-    this.$axios({
-      url: '/posts/cities'
-    }).then((res) => {
-      // eslint-disable-next-line no-console
-      console.log(res)
-      const { data } = res.data
-      this.cities = data
-    })
+    // 调用城市数据
+    this.getCity()
+    // 调用文章数据
+    this.getPost()
   },
   methods: {
+    // 城市列表
+    getCity() {
+      // 城市列表
+      this.$axios({
+        url: '/posts/cities'
+      }).then((res) => {
+        const { data } = res.data
+        this.cities = data
+      })
+    },
+    // 文章列表
+    getPost() {
+      const params = {
+        _start: this.start,
+        _limit: this.limit
+      }
+      if (this.city) {
+        params.city = this.city
+      }
+      this.$axios({
+        url: '/posts',
+        params
+      }).then((res) => {
+        const { data, total } = res.data
+        this.posts = data
+        this.total = total
+      })
+    },
     // 鼠标移出隐藏城市信息
     handleMenuLeave() {
       this.showSubMenu = false
     },
+    // 鼠标移入出数据
     handleMenuEnter(index) {
       this.currentMenu = index
       this.showSubMenu = true
       this.currentCities = this.cities[index].children
+    },
+    // 跳转城市
+    handleSearch() {
+      this.$router.push({
+        path: '?city=' + this.city
+      })
+      this.getPost()
+    },
+    // 点击标签跳转城市
+    handleChangeCity(item) {
+      this.$router.push({
+        path: '?city=' + item
+      })
+      this.getPost()
+    },
+    // 分页数
+    handleSizeChange(value) {
+      this.limit = value
+      this.start = 0
+      this.getPost()
+    },
+    // 分页器
+    handleCurrentChange(value) {
+      this.start = this.limit * (value - 1)
+      this.getPost()
     }
   }
 }
@@ -322,5 +381,12 @@ export default {
       left: 0;
     }
   }
+
 }
+
+ .catchInfo{
+    margin-top: 20px;
+    margin-left: 270px;
+    font-size: 20px;
+  }
 </style>

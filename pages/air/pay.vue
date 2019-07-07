@@ -50,8 +50,6 @@ export default {
           Authorization: `Bearer ${this.$store.state.user.userInfo.token}`
         }
       }).then((res) => {
-      // eslint-disable-next-line no-console
-        console.log(res)
         this.order = res.data
 
         // 生成二维码到canvas
