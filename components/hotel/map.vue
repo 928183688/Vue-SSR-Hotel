@@ -50,7 +50,9 @@ export default {
         // eslint-disable-next-line no-console
         // console.log(val)
         this.markers = []
-        this.getselectdata(val)
+        if (this.map) {
+          this.getselectdata(val)
+        }
       },
       deep: true
     }
